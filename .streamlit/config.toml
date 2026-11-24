@@ -1,0 +1,6 @@
+[theme]
+primaryColor = "#2e6fd7"             # Blue for sliders, checkboxes, active states
+backgroundColor = "#0B1120"          # Deep navy
+secondaryBackgroundColor = "#111827" # Slate-blue for sidebar & inputs
+textColor = "#F1F5F9"                # Crisp off-white text
+font = "sans serif"

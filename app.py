@@ -10,6 +10,67 @@ from modern_greek_accentuation.accentuation import is_accented
 
 st.set_page_config(page_title="Greek Lyrics Phonetic Converter", page_icon="🎵", layout="centered")
 
+# Custom CSS with Lyric Cards
+st.markdown(
+    """
+    <style>
+    /* Subtle blue gradient accent on the main title */
+    h1 {
+        background: linear-gradient(90deg, #60A5FA, #38BDF8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    /* Sleek lyric card styling */
+    .lyric-card {
+        background-color: #111827;
+        border: 1px solid #1E293B;
+        border-left: 3px solid #3B82F6;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+    }
+    .lyric-greek {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #F8FAFC;
+        margin-bottom: 4px;
+    }
+    .lyric-phonetic {
+        font-family: 'SFMono-Regular', Consolas, monospace;
+        font-size: 0.92rem;
+        color: #93C5FD;
+        letter-spacing: 0.3px;
+    }
+
+    /* Sleek play button */
+    div.stButton > button {
+        background-color: #1E293B;
+        color: #93C5FD;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        height: 46px;
+        width: 100%;
+        transition: all 0.2s ease;
+    }
+    div.stButton > button:hover {
+        background-color: #2563EB;
+        color: #FFFFFF;
+        border-color: #3B82F6;
+    }
+
+    /* Cleaner text area border */
+    textarea {
+        border-radius: 8px !important;
+        border: 1px solid #1E293B !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 default_lyrics = """Χαμένος κάπου στα στενά προς Φιλοπάππου
 Εδώ που η πόλη καταφέρνει να μην βιάζεται"""
 
@@ -117,7 +178,7 @@ with st.sidebar:
 lyrics_input = st.text_area(
     "Paste Greek lyrics:",
     value=default_lyrics,
-    height=200,
+    height=160,
     on_change=lambda: st.session_state.pop("active_line", None),
 )
 
@@ -125,16 +186,25 @@ if lyrics_input.strip():
     lines = lyrics_input.splitlines()
 
     st.subheader("Phonetic Lyrics")
+
     for idx, orig in enumerate(lines):
         if not orig.strip():
             st.write("")
             continue
 
         phonetic = convert_line(orig, stress_style, hyphenate)
-        col_text, col_btn = st.columns([5, 1])
+        col_text, col_btn = st.columns([6, 1], vertical_alignment="center")
 
         with col_text:
-            st.markdown(f"**{orig}**  \n`{phonetic}`")
+            st.markdown(
+                f"""
+                <div class="lyric-card">
+                    <div class="lyric-greek">{orig}</div>
+                    <div class="lyric-phonetic">{phonetic}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
         with col_btn:
             if st.button("🔊", key=f"play_{idx}", help="Pronounce this line"):
