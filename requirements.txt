@@ -1,0 +1,3 @@
+streamlit
+modern_greek_accentuation
+edge-tts
